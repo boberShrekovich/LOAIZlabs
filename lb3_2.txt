@@ -1,0 +1,147 @@
+#include <iostream>
+#include <ctime>
+
+using namespace std;
+
+struct node {
+	int s;
+	int n;
+	node* next;
+	node(int el, int ss) : n(el), s(ss), next(nullptr) {}
+};
+
+struct list {
+	node* firstEl;
+	node* lastEl;
+	list() : firstEl(nullptr), lastEl(nullptr) {}
+
+	// Пуст ли список
+	bool is_empty() {
+		return firstEl == nullptr;
+	}
+
+	// Добавление нового элемента el
+	void add(int el, int ss) {
+		node* p = new node(el, ss);
+		if (is_empty()) {
+			firstEl = p;
+			lastEl = p;
+			return;
+		}
+
+		node* el1 = firstEl;
+		node* el2 = firstEl->next;
+		if (firstEl->n < el) {
+			p->next = firstEl;
+			firstEl = p;
+			return;
+		}
+		while (el2 && el2->n < el) {
+			el2 = el2->next;
+			el1 = el1->next;
+		}
+		el1->next = p;
+		p->next = el2;
+	}
+
+	// Вывод всех элементов
+	void rew() {
+		if (is_empty()) return;
+		node* p = firstEl;
+		while (p) {
+			cout << p->n << ")" << p->s << " ";
+			p = p->next;
+		}
+		cout << "\n";
+	}
+
+	// Удаление первого узла
+	void del_firstEl() {
+		if (is_empty()) return;
+		node* p = firstEl;
+		firstEl = p->next;
+		delete p;
+	}
+
+	// Удаление последнего узла
+	void del_lastEl() {
+		if (is_empty()) return;
+		node* p = firstEl;
+		while (p->next != lastEl) p = p->next;
+		p->next = nullptr;
+		delete lastEl;
+		lastEl = p;
+	}
+
+	// Удаление узла с определенным элементом
+	void del(int ss) {
+		if (is_empty()) return;
+		while (1) {
+			if (firstEl->s == ss) {
+				del_firstEl();
+			}
+			else if (lastEl->s == ss) {
+				del_lastEl();
+			}
+			node* el1 = firstEl;
+			node* el2 = firstEl->next;
+			while (el2 && el2->s != ss) {
+				el2 = el2->next;
+				el1 = el1->next;
+			}
+			if (!el2) {
+				//cout << "Элемент не был найден." << endl;
+				return;
+			}
+			el1->next = el2->next;
+			delete el2;
+		}
+
+	}
+};
+
+
+int jijig;
+
+int main() {
+	setlocale(LC_ALL, "");
+
+	list l;
+	int ch;
+
+	cout << "1. Добавить элемент \n2. Вывести список \n3. Удалить первый элемент \n4. Выход\n";
+	while (1) {
+		cout << "\nВыберите пункт : ";
+		cin >> ch;
+		switch (ch) {
+		case 1: {
+			int s;
+			int n;
+			cout << "Введите значение: ";
+			cin >> s;
+			jijig++;
+			n = jijig;
+			l.add(n, s);
+			cout << endl;
+		}continue;
+
+		case 2: {
+			l.rew();
+			cout << endl;
+		}continue;
+
+		case 3: {
+			/*int uz;
+			cout << "Введите число, которое нужно удалить: ";
+			cin >> uz;*/
+			l.del_lastEl();
+			cout << endl;
+		}continue;
+
+		case 4: {
+			exit(0);
+		};
+		}
+	}
+	return 0;
+}
