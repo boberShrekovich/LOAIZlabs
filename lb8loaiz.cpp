@@ -1,6 +1,10 @@
 ﻿#include <iostream>
+#include <queue>
 
 using namespace std;
+
+
+queue <int> Q;
 
 int** createG(int size)
 {
@@ -47,10 +51,31 @@ void DFS(int** G, int size, int start, int* vis) {
 
 }
 
-int main(){
+void bFS(int** G, int size, int start, int* vis) {
+    Q.push(start);
+    vis[start] = 1;
+    
+    cout << start << " ";
+
+    while (!Q.empty()) {
+        start = Q.front();
+        Q.pop();
+        for (int i = 0; i < size; i++) {
+            if (G[start][i] == 1 && vis[i] == 0) {
+                Q.push(i);
+                vis[i] = 1;
+                cout << i << " ";
+            }
+        }
+    }
+}
+
+int main() {
+    srand(time(NULL));
+
     int** G = NULL;
     int nG, s;
-    
+
 
     cout << "Vvedite razmer: ";
     cin >> nG;
@@ -67,11 +92,20 @@ int main(){
     int* vis = NULL;
     vis = (int*)malloc(nG * sizeof(int));
 
+    /*
+    Q.push(i); //кладет в очередь
+    Q.pop(); //
+    s = Q.front(); // в начале очереди возвращает
+    Q.empty();//
+    */
+
     for (int i = 0; i < nG; i++) {
         vis[i] = 0;
     }
-    
-    DFS(G, nG, s, vis);
 
-    return 0;
+    //DFS(G, nG, s, vis);
+
+    bFS(G, nG, s, vis);
+
+	return 0;
 }
