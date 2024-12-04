@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <queue>
+#include <climits>
 
 using namespace std;
 
@@ -51,20 +52,18 @@ void DFS(int** G, int size, int start, int* vis) {
 
 }
 
-void bFS(int** G, int size, int start, int* vis) {
+void bFS(int** G, int size, int start, int* dist) { // vis вектор посещенных вершин
     Q.push(start);
-    vis[start] = 1;
-    
-    cout << start << " ";
+    dist[start] = 0;
+
 
     while (!Q.empty()) {
         start = Q.front();
         Q.pop();
         for (int i = 0; i < size; i++) {
-            if (G[start][i] == 1 && vis[i] == 0) {
+            if (G[start][i] == 1 && dist[i] == INT_MAX) {
                 Q.push(i);
-                vis[i] = 1;
-                cout << i << " ";
+                dist[i] = dist[start] + G[start][i];
             }
         }
     }
@@ -89,23 +88,21 @@ int main() {
     cin >> s;
     cout << endl;
 
-    int* vis = NULL;
-    vis = (int*)malloc(nG * sizeof(int));
+    int* dist = NULL;
+    dist = (int*)malloc(nG * sizeof(int));
 
-    /*
-    Q.push(i); //кладет в очередь
-    Q.pop(); //
-    s = Q.front(); // в начале очереди возвращает
-    Q.empty();//
-    */
-
+ 
     for (int i = 0; i < nG; i++) {
-        vis[i] = 0;
+        dist[i] = INT_MAX;
     }
 
-    //DFS(G, nG, s, vis);
 
-    bFS(G, nG, s, vis);
+    bFS(G, nG, s, dist);
+    for (int i = 0; i < nG; i++) {
+        cout << dist[i] << " ";
+    }
 
-	return 0;
+    cout << endl;
+
+    return 0;
 }
